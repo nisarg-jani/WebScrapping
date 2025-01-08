@@ -1,0 +1,109 @@
+# Web Scraping Popular Companies from AmbitionBox
+
+## Overview
+This script is designed to scrape data about popular companies listed on the AmbitionBox website. The data collected includes company names, ratings, rating counts, company information, and the categories they are highly and critically rated for. The scraped data is saved in a CSV file and progress is tracked to resume scraping in case of interruptions.
+
+## Features
+- Scrapes data from multiple pages (up to a defined limit).
+- Implements retry mechanisms for handling potential failures.
+- Saves progress to a file to resume scraping from the last page in case of interruptions.
+- Saves data periodically to minimize data loss.
+- Uses randomized delays and a fake user agent for better web scraping ethics and reduced detection risk.
+
+## Libraries Used
+
+### 1. **os**
+- Manages file system interactions for saving and loading progress.
+
+### 2. **selenium**
+- Automates web browsing tasks, including fetching web pages and interacting with elements.
+- **Submodules and Classes Used:**
+  - `webdriver` for launching the browser.
+  - `Service` for managing the ChromeDriver.
+  - `By` for locating elements.
+  - `WebDriverWait` and `expected_conditions` for handling dynamic loading of elements.
+
+### 3. **webdriver_manager**
+- Simplifies the installation and management of the ChromeDriver.
+
+### 4. **pandas**
+- Handles data storage, manipulation, and exporting to CSV files.
+
+### 5. **BeautifulSoup**
+- Parses HTML content and extracts specific elements using the `lxml` parser.
+
+### 6. **time** and **random**
+- Introduce delays between requests to reduce the risk of detection.
+
+### 7. **fake_useragent**
+- Generates random user agents to simulate different browsers during scraping.
+
+### 8. **numpy**
+- Provides functionality to handle missing values (NaN).
+
+## How the Script Works
+
+### 1. **Progress Tracking**
+- The script saves the current page number to `scraping_progress.txt`. When restarted, it resumes from the last saved page.
+
+### 2. **Setup**
+- Initializes the Chrome browser in headless mode using Selenium and configures it with randomized user agents.
+
+### 3. **Scraping Loop**
+- Iterates through pages from the last saved page to the defined end page.
+- Extracts company details from each page using BeautifulSoup and stores them in lists.
+
+### 4. **Data Extraction**
+- Extracts:
+  - Company Name
+  - Ratings and Rating Counts
+  - Company Information
+  - "Highly Rated For" and "Critically Rated For" categories
+- Handles missing or unavailable data by assigning `NaN` values.
+
+### 5. **Data Saving**
+- Saves data periodically every 10 pages to `popular_on_abitionbox.csv`.
+- Appends to the file if it already exists, ensuring no data is overwritten.
+
+### 6. **Error Handling**
+- Includes retry mechanisms for page loading.
+- Restarts the browser driver if a fatal error occurs, minimizing disruptions during scraping.
+
+## CSV File Format
+The output CSV file contains the following columns:
+- `name`: Company Name
+- `rating`: Overall rating of the company
+- `Total Rating`: Total number of ratings received
+- `Company Info`: Additional information about the company
+- `Highly Rated For`: Features the company is highly rated for
+- `Critically Rated For`: Features the company is critically rated for
+
+## Usage
+
+1. **Install Dependencies**:
+   ```bash
+   pip install selenium webdriver-manager pandas beautifulsoup4 lxml fake-useragent numpy
+   ```
+
+2. **Run the Script**:
+   ```bash
+   python your_script_name.py
+   ```
+
+3. **Monitor Progress**:
+   - Check the `scraping_progress.txt` file to see the last completed page.
+   - Review the `popular_on_abitionbox.csv` file for the collected data.
+
+## Notes
+- Ensure Chrome and ChromeDriver are installed on your system.
+- The script uses headless mode for scraping, meaning no browser window will appear during execution.
+- Use this script responsibly and ensure compliance with the terms of service of the AmbitionBox website.
+
+## Potential Improvements
+- Add functionality for scraping additional fields if required.
+- Implement multithreading to speed up scraping.
+- Include advanced error logging and exception handling.
+
+---
+
+If you encounter any issues or have suggestions for improvement, feel free to create an issue or submit a pull request!
